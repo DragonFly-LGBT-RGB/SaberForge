@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090c11">
+  <meta name="description" content="Saberforge — конструктор светового меча и наложение клинка на фото. Выберите путь, цвет кристалла и рукоять, вращайте, масштабируйте и ставьте меч на любое изображение.">
+  <title>Saberforge — конструктор светового меча</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%2364d9ff' d='M32 2l7 23 23 7-23 7-7 23-7-23-23-7 23-7z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="brand" id="brandButton" aria-label="Saberforge — вернуться к конструктору">
+        <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M20 2 24.5 15.5 38 20l-13.5 4.5L20 38l-4.5-13.5L2 20l13.5-4.5L20 2Z" fill="currentColor"/>
+          <circle cx="20" cy="20" r="4" fill="#0a0d12"/>
+        </svg>
+        <span class="brand-word">SABER<span>FORGE</span></span>
+        <span class="brand-edition">LAB / 04</span>
+      </button>
+
+      <nav class="main-nav" aria-label="Основная навигация">
+        <button class="nav-link active" id="constructorButton">Конструктор</button>
+        <button class="nav-link" id="collectionButton">Коллекция <span class="nav-count" id="collectionCount">0</span></button>
+        <button class="nav-link" id="composeNavButton">Наложение <span class="nav-arrow">✧</span></button>
+        <button class="nav-link" id="helpButton">Управление <span class="nav-arrow">↗</span></button>
+      </nav>
+
+      <div class="top-actions">
+        <div class="system-status"><span class="status-dot"></span><span>Система готова</span></div>
+        <button class="button button-primary export-button" id="exportButton">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 15v4h14v-4"/></svg>
+          <span id="exportLabel">Сохранить PNG</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="panel left-panel" aria-label="Настройки кристалла и клинка">
+        <div class="panel-intro">
+          <div class="eyebrow"><span>01</span> / ПУТЬ СИЛЫ</div>
+          <h1>Создай свой<br><em>световой меч</em></h1>
+          <p>Выбери сторону. Настрой кристалл.<br>Зажги собственный клинок.</p>
+        </div>
+
+        <section class="control-section faction-section">
+          <div class="section-heading">
+            <h2>Принадлежность</h2>
+            <span class="micro-label" id="pathLabel">СВЕТЛАЯ СТОРОНА</span>
+          </div>
+          <div class="faction-switch" role="radiogroup" aria-label="Путь владельца">
+            <button class="faction-button active" data-faction="jedi" role="radio" aria-checked="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M4 7c4 1 6 3 8 6 2-3 4-5 8-6M5 17c3-1 5-3 7-6 2 3 4 5 7 6"/></svg>
+              Джедай
+            </button>
+            <button class="faction-button" data-faction="sith" role="radio" aria-checked="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 5v8l-8 5-8-5V8l8-5Zm0 0v18M4 8l16 8M20 8 4 16"/></svg>
+              Ситх
+            </button>
+            <button class="faction-button" data-faction="custom" role="radio" aria-checked="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4m0 10v4M3 12h4m10 0h4M5.6 5.6l2.8 2.8m7.2 7.2 2.8 2.8m0-12.8-2.8 2.8m-7.2 7.2-2.8 2.8"/><circle cx="12" cy="12" r="3"/></svg>
+              Свой
+            </button>
+          </div>
+        </section>
+
+        <section class="control-section color-section">
+          <div class="section-heading">
+            <h2>Кристалл и цвет</h2>
+            <span class="color-value" id="hexLabel">#64D9FF</span>
+          </div>
+          <div class="swatches" role="group" aria-label="Готовые цвета клинка">
+            <button class="swatch active" style="--swatch:#64D9FF" data-color="#64D9FF" data-name="Синий · Илюм" aria-label="Синий цвет" title="Синий · Илюм"></button>
+            <button class="swatch" style="--swatch:#64F5A5" data-color="#64F5A5" data-name="Зелёный · Дагоба" aria-label="Зелёный цвет" title="Зелёный · Дагоба"></button>
+            <button class="swatch" style="--swatch:#B785FF" data-color="#B785FF" data-name="Фиолетовый · Хейст" aria-label="Фиолетовый цвет" title="Фиолетовый · Хейст"></button>
+            <button class="swatch" style="--swatch:#FF404D" data-color="#FF404D" data-name="Красный · Мустафар" aria-label="Красный цвет" title="Красный · Мустафар"></button>
+            <button class="swatch" style="--swatch:#FFD166" data-color="#FFD166" data-name="Жёлтый · Джедха" aria-label="Жёлтый цвет" title="Жёлтый · Джедха"></button>
+            <button class="swatch swatch-white" style="--swatch:#F4F7FF" data-color="#F4F7FF" data-name="Белый · Очищенный" aria-label="Белый цвет" title="Белый · Очищенный"></button>
+          </div>
+          <div class="custom-color-control">
+            <label class="color-picker-wrap" for="colorPicker" aria-label="Открыть палитру цветов">
+              <input type="color" id="colorPicker" value="#64d9ff" aria-label="Выбрать собственный цвет">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            </label>
+            <span class="custom-color-copy"><strong>Свой оттенок</strong><small id="colorName">Синий · Илюм</small></span>
+            <input class="hex-input" id="hexInput" value="64D9FF" maxlength="7" spellcheck="false" aria-label="HEX-код цвета">
+          </div>
+        </section>
+
+        <section class="control-section blade-settings">
+          <div class="section-heading"><h2>Параметры клинка</h2><span class="micro-label">ПЛАЗМА</span></div>
+          <div class="range-control">
+            <div class="range-label"><label for="bladeLength">Длина клинка</label><output id="bladeLengthValue" for="bladeLength">100 <span>см</span></output></div>
+            <input type="range" id="bladeLength" min="70" max="130" value="100" step="1">
+            <div class="range-extents"><span>70 см</span><span>130 см</span></div>
+          </div>
+          <div class="range-control glow-control">
+            <div class="range-label"><label for="glowStrength">Сила свечения</label><output id="glowValue" for="glowStrength">72 <span>%</span></output></div>
+            <input type="range" id="glowStrength" min="20" max="100" value="72" step="1">
+            <div class="range-extents"><span>Мягкое</span><span>Интенсивное</span></div>
+          </div>
+        </section>
+
+        <div class="crystal-status">
+          <div class="crystal-icon" aria-hidden="true">
+            <svg viewBox="0 0 40 48"><path d="m20 2 13 12-5 25-8 7-8-7-5-25L20 2Z"/><path d="m7 14 13 8 13-8M20 2v20m-8 17 8-17 8 17"/></svg>
+          </div>
+          <div class="crystal-status-copy">
+            <span>СТАБИЛЬНОСТЬ КРИСТАЛЛА</span>
+            <div class="stability-row"><strong id="stabilityValue">98.4%</strong><div class="stability-track"><i id="stabilityBar"></i></div></div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="stage-panel" id="stagePanel" aria-label="Интерактивный предпросмотр меча">
+        <div class="stage-topbar">
+          <div class="model-title"><span class="live-dot"></span><strong id="saberModel">AEGIS / MARK IV</strong><span class="model-tag">MK.04</span></div>
+          <div class="mode-switch" role="group" aria-label="Режим работы">
+            <button class="mode-tab active" id="studioModeButton" aria-pressed="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20"/><path d="M8 6h8M8 12h8M9 18h6" opacity=".55"/></svg>
+              3D-меч
+            </button>
+            <button class="mode-tab" id="composeModeButton" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.6"/><path d="m4 17 5-5 4 4 3-2.5 5 4.5"/></svg>
+              Наложение
+            </button>
+          </div>
+          <div class="stage-mode">ГОЛОГРАММНЫЙ РЕЖИМ <span>•</span> SVG</div>
+          <button class="icon-button fullscreen-button" id="fullscreenButton" title="Развернуть предпросмотр" aria-label="Развернуть предпросмотр">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg>
+          </button>
+        </div>
+
+        <div class="stage" id="stage" tabindex="0" aria-label="Световой меч. Перетаскивайте для вращения, используйте колесо мыши для масштабирования.">
+          <canvas id="starsCanvas" aria-hidden="true"></canvas>
+          <div class="stage-grid" aria-hidden="true"></div>
+          <div class="ambient-glow" aria-hidden="true"></div>
+          <div class="stage-vignette" aria-hidden="true"></div>
+
+          <div class="stage-label stage-label-left">
+            <span>ОБЪЕКТ / 001</span>
+            <strong id="objectLabel">SF–AEGIS–04</strong>
+          </div>
+          <div class="stage-label stage-label-right">
+            <span>КАЙБЕР-КРИСТАЛЛ</span>
+            <strong id="crystalLabel">#64D9FF</strong>
+          </div>
+          <div class="stage-status" id="stageStatus"><i></i><span>КЛИНОК СТАБИЛЕН</span></div>
+
+          <svg id="saberSvg" class="saber-svg" viewBox="0 0 1000 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Собранный световой меч">
+            <defs>
+              <linearGradient id="metal" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#141a20"/><stop offset=".12" stop-color="#5e6a75"/><stop offset=".25" stop-color="#d8e0e5"/><stop offset=".36" stop-color="#697580"/><stop offset=".51" stop-color="#242d35"/><stop offset=".7" stop-color="#98a3ac"/><stop offset=".85" stop-color="#e1e6e9"/><stop offset="1" stop-color="#242b31"/>
+              </linearGradient>
+              <linearGradient id="darkMetal" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#050609"/><stop offset=".18" stop-color="#252b33"/><stop offset=".33" stop-color="#6e7780"/><stop offset=".47" stop-color="#15191f"/><stop offset=".72" stop-color="#303740"/><stop offset=".88" stop-color="#101318"/><stop offset="1" stop-color="#030405"/>
+              </linearGradient>
+              <linearGradient id="goldMetal" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#302515"/><stop offset=".2" stop-color="#a78243"/><stop offset=".4" stop-color="#f2d58c"/><stop offset=".55" stop-color="#8d6a32"/><stop offset=".78" stop-color="#d4b36a"/><stop offset="1" stop-color="#3e2e17"/>
+              </linearGradient>
+              <linearGradient id="copperMetal" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#24120e"/><stop offset=".2" stop-color="#8e4b37"/><stop offset=".4" stop-color="#dc9470"/><stop offset=".62" stop-color="#663426"/><stop offset=".82" stop-color="#bd7456"/><stop offset="1" stop-color="#28140f"/>
+              </linearGradient>
+              <filter id="glowHeavy" filterUnits="userSpaceOnUse" x="-180" y="-480" width="360" height="640" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="22"/></filter>
+              <filter id="glowMedium" filterUnits="userSpaceOnUse" x="-100" y="-450" width="200" height="600" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="8"/></filter>
+              <filter id="softShadow" x="-80%" y="-40%" width="260%" height="190%"><feDropShadow dx="8" dy="14" stdDeviation="12" flood-color="#000" flood-opacity=".6"/></filter>
+              <filter id="smallGlow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="3"/></filter>
+            </defs>
+
+            <g class="orbit-system" fill="none" stroke="#7290a8" stroke-width="1" opacity=".18" aria-hidden="true">
+              <circle cx="500" cy="390" r="284" stroke-dasharray="2 12"/>
+              <circle cx="500" cy="390" r="338" stroke-dasharray="1 20" opacity=".55"/>
+              <path d="M500 78v26M500 676v26M188 390h26M786 390h26" opacity=".8"/>
+              <path d="M279 169l18 18M703 593l18 18M279 611l18-18M703 187l18-18" opacity=".5"/>
+              <path d="M500 390 739 247" stroke-dasharray="4 9" opacity=".45"/>
+              <circle cx="500" cy="390" r="7"/><circle cx="500" cy="390" r="2" fill="#7290a8"/>
+              <path d="M500 107a283 283 0 0 1 245 142" stroke="#9bb2c4" stroke-width="2" opacity=".8"/>
+            </g>
+            <g class="orbit-copy" fill="#7890a3" opacity=".35" font-family="monospace" font-size="10" letter-spacing="2" aria-hidden="true">
+              <text x="514" y="101">000 / EMITTER</text><text x="742" y="235">+35.0°</text><text x="188" y="414">Y–AXIS</text>
+            </g>
+
+            <g id="saberWorld" transform="translate(500 390)">
+              <g id="saberTransform" transform="rotate(35) scale(1)">
+                <g id="bladeScaler" transform="translate(0 60) scale(1 1) translate(0 -60)">
+                  <g id="bladeGroup" fill="none" stroke-linecap="round">
+                    <line x1="0" y1="-390" x2="0" y2="61" stroke="#64D9FF" stroke-width="74" opacity=".25" filter="url(#glowHeavy)" data-blade-color data-glow-heavy/>
+                    <line x1="0" y1="-390" x2="0" y2="61" stroke="#64D9FF" stroke-width="48" opacity=".72" filter="url(#glowMedium)" data-blade-color data-glow-medium/>
+                    <line x1="0" y1="-390" x2="0" y2="61" stroke="#64D9FF" stroke-width="30" opacity=".96" data-blade-color/>
+                    <line x1="0" y1="-390" x2="0" y2="61" stroke="#F8FCFF" stroke-width="15"/>
+                    <line x1="0" y1="-390" x2="0" y2="61" stroke="#FFFFFF" stroke-width="6"/>
+                    <g id="bladeSparks" fill="#64D9FF" stroke="none" data-blade-fill>
+                      <circle cx="24" cy="-84" r="2.2"><animate attributeName="opacity" values="0;1;0" dur="1.8s" repeatCount="indefinite"/></circle>
+                      <circle cx="-27" cy="-214" r="1.6"><animate attributeName="opacity" values="0;.8;0" dur="2.3s" begin="-.8s" repeatCount="indefinite"/></circle>
+                      <circle cx="21" cy="-330" r="1.8"><animate attributeName="opacity" values="0;.9;0" dur="2s" begin="-.3s" repeatCount="indefinite"/></circle>
+                    </g>
+                  </g>
+                </g>
+
+                <g id="hiltAegis" class="hilt-variant" filter="url(#softShadow)">
+                  <path d="M-43 68-38 31-23 23-17 59H17L23 23 38 31 43 68Z" fill="url(#metal)" stroke="#87939c" stroke-width="1"/>
+                  <path d="M-32 62-28 36-23 33-20 59M32 62 28 36 23 33 20 59" fill="none" stroke="#11181e" stroke-width="5"/>
+                  <rect x="-46" y="61" width="92" height="23" rx="5" fill="url(#metal)" stroke="#a4afb7" stroke-width="1"/>
+                  <rect x="-52" y="78" width="104" height="13" rx="3" fill="url(#darkMetal)" stroke="#66717a"/>
+                  <rect x="-31" y="90" width="62" height="30" fill="url(#goldMetal)"/>
+                  <path d="M-31 98h62M-31 111h62" stroke="#2c261b" stroke-width="3" opacity=".7"/>
+                  <rect x="-36" y="117" width="72" height="139" rx="9" fill="url(#metal)" stroke="#87939c"/>
+                  <rect x="-28" y="143" width="56" height="91" rx="5" fill="#11171c" stroke="#46515a"/>
+                  <g stroke="#53606a" stroke-width="4">
+                    <path d="M-27 151h54M-27 163h54M-27 175h54M-27 187h54M-27 199h54M-27 211h54M-27 223h54"/>
+                  </g>
+                  <path d="M-36 129h72M-36 243h72" stroke="#d6dde1" stroke-width="3" opacity=".65"/>
+                  <rect x="22" y="122" width="13" height="27" rx="3" fill="#171d22" stroke="#929ca4"/>
+                  <rect x="25" y="126" width="7" height="10" rx="2" fill="#64D9FF" data-accent-fill/>
+                  <circle cx="-24" cy="130" r="3" fill="#12181d" stroke="#aab3ba"/>
+                  <rect x="-40" y="253" width="80" height="16" rx="3" fill="url(#darkMetal)" stroke="#727e87"/>
+                  <path d="M-34 269h68l-5 27-12 10h-34l-12-10Z" fill="url(#metal)" stroke="#75818a"/>
+                  <path d="M-25 277v18M-12 277v24M0 277v26M12 277v24M25 277v18" stroke="#1b242b" stroke-width="5"/>
+                  <rect x="-28" y="300" width="56" height="9" rx="3" fill="url(#goldMetal)"/>
+                </g>
+
+                <g id="hiltNox" class="hilt-variant" style="display:none" filter="url(#softShadow)">
+                  <path d="M-55 69-46 12-26 30-18 64H18L26 30 46 12 55 69 35 86h-70Z" fill="url(#darkMetal)" stroke="#5f6870"/>
+                  <path d="m-45 19 9 48M45 19 36 67" stroke="#a4adb4" stroke-width="3" opacity=".55"/>
+                  <path d="M-33 58-28 31M33 58 28 31" stroke="#FF404D" stroke-width="3" data-accent-stroke filter="url(#smallGlow)"/>
+                  <rect x="-48" y="68" width="96" height="26" rx="3" fill="url(#darkMetal)" stroke="#69737c"/>
+                  <path d="M-48 74h96M-43 89h86" stroke="#a0a8ae" stroke-width="2" opacity=".5"/>
+                  <rect x="-35" y="93" width="70" height="30" fill="url(#metal)"/>
+                  <rect x="-40" y="121" width="80" height="139" rx="5" fill="url(#darkMetal)" stroke="#59636b"/>
+                  <path d="M-40 135h80M-40 247h80" stroke="#77828b" stroke-width="4"/>
+                  <path d="M-26 146h52v86h-52Z" fill="#080b0e" stroke="#343d45"/>
+                  <g stroke="#3f4952" stroke-width="5">
+                    <path d="m-25 153 50 12M-25 170l50 12M-25 187l50 12M-25 204l50 12"/>
+                  </g>
+                  <path d="M-31 128v117M31 128v117" stroke="#FF404D" stroke-width="2" opacity=".8" data-accent-stroke/>
+                  <rect x="17" y="126" width="17" height="28" rx="2" fill="#080a0d" stroke="#7a848c"/>
+                  <circle cx="25.5" cy="135" r="4" fill="#FF404D" data-accent-fill/>
+                  <path d="M-43 258h86l-6 19h-74Z" fill="url(#metal)" stroke="#606b73"/>
+                  <path d="M-35 276h70l-7 29-13 8h-30l-13-8Z" fill="url(#darkMetal)" stroke="#535e67"/>
+                  <path d="M-23 281v22M-8 281v27M8 281v27M23 281v22" stroke="#050709" stroke-width="6"/>
+                  <path d="M-23 311h46" stroke="#FF404D" stroke-width="3" data-accent-stroke/>
+                </g>
+
+                <g id="hiltRonin" class="hilt-variant" style="display:none" filter="url(#softShadow)">
+                  <path d="M-40 66-34 29h16l5 35H13l5-35h16l6 37-12 18h-56Z" fill="url(#copperMetal)" stroke="#b8795e"/>
+                  <path d="M-28 32v29M28 32v29" stroke="#f0b292" stroke-width="2" opacity=".6"/>
+                  <rect x="-45" y="65" width="90" height="21" rx="8" fill="url(#darkMetal)" stroke="#76818a"/>
+                  <rect x="-36" y="84" width="72" height="24" fill="url(#copperMetal)"/>
+                  <path d="M-36 92h72M-36 102h72" stroke="#321d17" stroke-width="3"/>
+                  <path d="M-34 107h68l8 143h-84Z" fill="url(#metal)" stroke="#7f8b93"/>
+                  <path d="M-28 134h56l5 96h-66Z" fill="#191715" stroke="#65574d"/>
+                  <g fill="none" stroke="#8d6b52" stroke-width="6">
+                    <path d="m-28 139 55 17M-29 158l57 17M-30 177l59 17M-31 196l61 17"/>
+                  </g>
+                  <path d="M-35 118h70M-39 237h78" stroke="#d4a484" stroke-width="3"/>
+                  <path d="M-37 120v112" stroke="#64D9FF" stroke-width="2" opacity=".85" data-accent-stroke/>
+                  <rect x="20" y="114" width="20" height="34" rx="5" fill="url(#copperMetal)" stroke="#d69b7d"/>
+                  <circle cx="30" cy="124" r="4" fill="#64D9FF" data-accent-fill/>
+                  <rect x="-43" y="247" width="86" height="17" rx="4" fill="url(#copperMetal)" stroke="#bd8064"/>
+                  <path d="M-35 264h70l-3 29-16 13h-32l-16-13Z" fill="url(#darkMetal)" stroke="#657079"/>
+                  <path d="m-23 271 46 22M-25 285l25 12M3 270l22 11" stroke="#8f5b45" stroke-width="5"/>
+                  <circle cx="0" cy="303" r="7" fill="url(#copperMetal)" stroke="#d19779"/>
+                </g>
+              </g>
+            </g>
+          </svg>
+
+          <div class="drag-hint" id="dragHint">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="17" rx="5"/><path d="M12 2v6M4 12H1m22 0h-3M5 5 3 3m16 2 2-2"/></svg>
+            <span>Перетаскивай, чтобы вращать</span><i></i><span>Колесо — масштаб</span>
+          </div>
+          <div class="view-data" aria-hidden="true"><span id="viewRotation">Y 035.0</span><span id="viewScale">Z 1.00</span><span>RENDER / LIVE</span></div>
+          <div class="corner corner-tl" aria-hidden="true"></div><div class="corner corner-tr" aria-hidden="true"></div><div class="corner corner-bl" aria-hidden="true"></div><div class="corner corner-br" aria-hidden="true"></div>
+        </div>
+
+        <div class="compose-stage" id="composeStage" aria-label="Наложение светового меча на фото" hidden>
+          <div class="compose-empty" id="composeEmpty">
+            <div class="compose-empty-card">
+              <div class="compose-empty-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><rect x="4" y="10" width="40" height="29" rx="3"/><circle cx="16.5" cy="21" r="4"/><path d="m8 35 11-11 6.5 6.5 5.5-4.5 8 9"/></svg>
+                <span>✦</span>
+              </div>
+              <span class="eyebrow"><span>04</span> / КОМПОЗИТ</span>
+              <h2>Наложи меч на фото</h2>
+              <p>Загрузи снимок, поставь клинок в нужную точку, подгони размер и угол — и сохрани готовую картинку. Фото не покидает браузер.</p>
+              <div class="compose-empty-actions">
+                <button class="button button-primary" id="uploadPhotoButton">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L8 8m4-4 4 4M4 16v4h16v-4"/></svg>
+                  <span>Выбрать фото</span>
+                </button>
+                <button class="button button-ghost" id="demoPhotoButton">Пример</button>
+              </div>
+              <span class="compose-empty-note">JPG · PNG · WEBP — или перетащи файл в это окно, либо вставь из буфера (Ctrl + V)</span>
+            </div>
+          </div>
+
+          <div class="compose-viewport" id="composeViewport" hidden>
+            <div class="compose-frame" id="composeFrame">
+              <img class="compose-image" id="composeImage" alt="Фото с наложенным световым мечом" draggable="false">
+              <svg class="compose-svg" id="composeSvg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs id="composeDefs"></defs>
+                <g id="ovRoot">
+                  <g id="ovBladeScaler">
+                    <g id="ovGlow" style="mix-blend-mode:screen">
+                      <line data-ov-glow data-blade-color data-glow-heavy x1="0" y1="-390" x2="0" y2="61" stroke-width="74" opacity=".25" stroke-linecap="round" filter="url(#ov-glowHeavy)"/>
+                      <line data-ov-glow data-blade-color data-glow-medium x1="0" y1="-390" x2="0" y2="61" stroke-width="48" opacity=".72" stroke-linecap="round" filter="url(#ov-glowMedium)"/>
+                    </g>
+                    <g id="ovSolid">
+                      <line data-ov-core data-blade-color x1="0" y1="-390" x2="0" y2="61" stroke-width="30" opacity=".96" stroke-linecap="round"/>
+                      <line x1="0" y1="-390" x2="0" y2="61" stroke="#F8FCFF" stroke-width="15" stroke-linecap="round"/>
+                      <line x1="0" y1="-390" x2="0" y2="61" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+                    </g>
+                  </g>
+                  <g id="ovHilt"></g>
+                </g>
+                <g id="ovGuides" pointer-events="none">
+                  <line id="ovGuideLine" stroke="#9dc4dd" stroke-width="1" stroke-dasharray="6 9" opacity=".45" vector-effect="non-scaling-stroke"/>
+                </g>
+              </svg>
+              <div class="ov-pivot" id="ovPivot" hidden></div>
+              <button class="ov-handle ov-handle-rotate" id="ovRotateHandle" type="button" title="Повернуть меч" aria-label="Повернуть меч" hidden>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-3.2-6.4M20 4v5h-5"/></svg>
+              </button>
+              <button class="ov-handle ov-handle-scale" id="ovScaleHandle" type="button" title="Изменить размер" aria-label="Изменить размер" hidden>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5H5v4m10-4h4v4M5 15v4h4m10-4v4h-4M9 9l-3-3m9 3 3-3M9 15l-3 3m9-3 3 3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="compose-hint" id="composeHint" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11V5.5a1.5 1.5 0 0 1 3 0V11m0 0V4.5a1.5 1.5 0 0 1 3 0V11m0 0V6.5a1.5 1.5 0 0 1 3 0V14a6 6 0 0 1-6 6h-1.5a5 5 0 0 1-3.9-1.9L5 15"/></svg>
+            <span>Тащи меч — двигаешь</span><i></i><span>Кружок на клинке — поворот</span><i></i><span>Колесо — размер</span>
+          </div>
+          <div class="corner corner-tl" aria-hidden="true"></div><div class="corner corner-tr" aria-hidden="true"></div><div class="corner corner-bl" aria-hidden="true"></div><div class="corner corner-br" aria-hidden="true"></div>
+        </div>
+
+        <div class="stage-toolbar" aria-label="Быстрое управление видом">
+          <div class="toolbar-group rotation-group">
+            <button class="icon-button" id="rotateLeftButton" title="Повернуть на 15° влево" aria-label="Повернуть влево"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
+            <div class="toolbar-readout"><span>ВРАЩЕНИЕ</span><strong id="rotationToolbarValue">35°</strong></div>
+            <button class="icon-button" id="rotateRightButton" title="Повернуть на 15° вправо" aria-label="Повернуть вправо"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
+          </div>
+          <span class="toolbar-divider"></span>
+          <button class="reset-button" id="resetViewButton"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6"/></svg><span>Сбросить</span></button>
+          <span class="toolbar-divider second-divider"></span>
+          <div class="toolbar-group scale-group">
+            <button class="icon-button" id="zoomOutButton" title="Уменьшить" aria-label="Уменьшить масштаб"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button>
+            <div class="toolbar-readout"><span>МАСШТАБ</span><strong id="scaleToolbarValue">100%</strong></div>
+            <button class="icon-button" id="zoomInButton" title="Увеличить" aria-label="Увеличить масштаб"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12"/></svg></button>
+          </div>
+          <button class="ignite-button" id="igniteButton" aria-pressed="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v10m-5-7a9 9 0 1 0 10 0"/></svg>
+            <span class="ignite-label">Выключить меч</span><i></i>
+          </button>
+        </div>
+
+        <div class="stage-toolbar compose-toolbar" id="composeToolbar" aria-label="Управление мечом на фото" hidden>
+          <button class="toolbar-photo-button" id="changePhotoButton" title="Выбрать другое фото">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.6"/><path d="m4 17 5-5 4 4 3-2.5 5 4.5"/></svg>
+            <span>Фото</span>
+          </button>
+          <span class="toolbar-divider"></span>
+          <div class="toolbar-group rotation-group">
+            <button class="icon-button" id="composeRotateLeft" title="Повернуть на 5° влево" aria-label="Повернуть влево"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
+            <div class="toolbar-readout"><span>УГОЛ</span><strong id="composeRotationValue">0°</strong></div>
+            <button class="icon-button" id="composeRotateRight" title="Повернуть на 5° вправо" aria-label="Повернуть вправо"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
+          </div>
+          <span class="toolbar-divider"></span>
+          <div class="toolbar-group scale-group">
+            <button class="icon-button" id="composeZoomOut" title="Уменьшить меч" aria-label="Уменьшить"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button>
+            <div class="toolbar-readout"><span>РАЗМЕР</span><strong id="composeScaleValue">50%</strong></div>
+            <button class="icon-button" id="composeZoomIn" title="Увеличить меч" aria-label="Увеличить"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12"/></svg></button>
+          </div>
+          <span class="toolbar-divider"></span>
+          <button class="reset-button flip-button" id="flipSaberButton" aria-pressed="false" title="Перевернуть меч другим концом">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18m0-18-4 4m4-4 4 4m-4 14-4-4m4 4 4-4"/></svg>
+            <span>Отразить</span>
+          </button>
+          <button class="reset-button" id="resetComposeButton" title="Вернуть меч в исходное положение">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6"/></svg>
+            <span>Сброс</span>
+          </button>
+          <button class="ignite-button" id="composeIgniteButton" aria-pressed="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v10m-5-7a9 9 0 1 0 10 0"/></svg>
+            <span class="ignite-label">Выключить меч</span><i></i>
+          </button>
+        </div>
+      </section>
+
+      <aside class="panel right-panel" aria-label="Настройки рукояти и положения">
+        <section class="control-section hilt-section">
+          <div class="eyebrow"><span>02</span> / КОНСТРУКЦИЯ</div>
+          <div class="section-heading hilt-heading"><h2>Рукоять</h2><span class="micro-label">3 МОДЕЛИ</span></div>
+          <p class="section-description">Каждая деталь влияет на характер меча.</p>
+          <div class="hilt-options" role="radiogroup" aria-label="Модель рукояти">
+            <button class="hilt-card active" data-hilt="aegis" role="radio" aria-checked="true">
+              <span class="hilt-preview" aria-hidden="true">
+                <svg viewBox="0 0 110 44"><g transform="translate(55 22) rotate(-90)"><path d="M-7-42h14v12H-7z" fill="#b5c0c9"/><path d="M-10-31h20v7h-20z" fill="#525e68"/><path d="M-8-24h16v35H-8z" fill="#89969f"/><path d="M-7-12H7v19H-7z" fill="#1b242b"/><path d="M-10 11h20v6h-20z" fill="#59656e"/><path d="M-7 17H7v12H-7z" fill="#9eabb4"/><path d="M-6-29H6v3H-6z" fill="#c6a867"/></g></svg>
+              </span>
+              <span class="hilt-card-copy"><strong>AEGIS</strong><small>Баланс · классика</small></span>
+              <span class="hilt-card-index">01</span><span class="selected-indicator"></span>
+            </button>
+            <button class="hilt-card" data-hilt="nox" role="radio" aria-checked="false">
+              <span class="hilt-preview" aria-hidden="true">
+                <svg viewBox="0 0 110 44"><g transform="translate(55 22) rotate(-90)"><path d="m-10-43 5 8 5-8 5 8 5-8v14h-20z" fill="#373f47"/><path d="M-9-30H9v8H-9z" fill="#151a1f"/><path d="M-8-22H8v35H-8z" fill="#343d45"/><path d="M-7-10H7V8H-7z" fill="#090c10"/><path d="M-10 13h20v6h-20z" fill="#77818a"/><path d="M-8 19H8v11H-8z" fill="#20272d"/><path d="M-9-20H-7v32H-9zM7-20H9v32H7z" fill="#ff404d"/></g></svg>
+              </span>
+              <span class="hilt-card-copy"><strong>NOX</strong><small>Мощь · агрессия</small></span>
+              <span class="hilt-card-index">02</span><span class="selected-indicator"></span>
+            </button>
+            <button class="hilt-card" data-hilt="ronin" role="radio" aria-checked="false">
+              <span class="hilt-preview" aria-hidden="true">
+                <svg viewBox="0 0 110 44"><g transform="translate(55 22) rotate(-90)"><path d="M-8-42H8l3 14h-22z" fill="#a56b51"/><path d="M-10-29h20v7h-20z" fill="#313a42"/><path d="M-7-22H7l3 35h-20z" fill="#939ea5"/><path d="M-7-9H7V9H-7z" fill="#382a22"/><path d="M-10 13h20v6h-20z" fill="#a56b51"/><path d="M-8 19H8l-2 11H-6z" fill="#2b333a"/><path d="m-7-7 14 5M-7 0l14 5" stroke="#a57b5f" stroke-width="2"/></g></svg>
+              </span>
+              <span class="hilt-card-copy"><strong>RONIN</strong><small>Свобода · свой путь</small></span>
+              <span class="hilt-card-index">03</span><span class="selected-indicator"></span>
+            </button>
+          </div>
+        </section>
+
+        <section class="control-section position-section">
+          <div class="eyebrow"><span>03</span> / ПОЛОЖЕНИЕ</div>
+          <div class="section-heading"><h2>Точная настройка</h2></div>
+          <div class="range-control position-control">
+            <div class="range-label"><label for="rotationRange">Угол вращения</label><div class="number-field"><input type="number" id="rotationInput" min="-180" max="180" value="35" aria-label="Угол вращения в градусах"><span>°</span></div></div>
+            <input type="range" id="rotationRange" min="-180" max="180" value="35" step="1">
+            <div class="range-extents"><span>−180°</span><span>+180°</span></div>
+          </div>
+          <div class="range-control position-control">
+            <div class="range-label"><label for="scaleRange">Масштаб модели</label><div class="number-field static-number"><output id="scaleValue" for="scaleRange">100</output><span>%</span></div></div>
+            <input type="range" id="scaleRange" min="50" max="160" value="100" step="1">
+            <div class="range-extents"><span>50%</span><span>160%</span></div>
+          </div>
+        </section>
+
+        <section class="control-section experience-section">
+          <div class="toggle-row">
+            <div><strong>Звук меча</strong><small>Синтезированный гул клинка</small></div>
+            <button class="switch" id="soundToggle" role="switch" aria-checked="false" aria-label="Звук меча"><span></span></button>
+          </div>
+          <div class="toggle-row">
+            <div><strong>Автовращение</strong><small>Медленный обзор модели</small></div>
+            <button class="switch" id="autoRotateToggle" role="switch" aria-checked="false" aria-label="Автовращение"><span></span></button>
+          </div>
+        </section>
+
+        <div class="right-bottom">
+          <button class="save-collection-button" id="saveCollectionButton"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v4h14v-4"/></svg><span>В коллекцию</span><kbd>⌘ S</kbd></button>
+          <div class="spec-grid">
+            <div><span>ТИП КЛИНКА</span><strong>Плазменный</strong></div>
+            <div><span>ЯДРО</span><strong>Кайбер</strong></div>
+            <div><span>КЛАСС</span><strong id="classSpec">Джедай</strong></div>
+            <div><span>СЕРИЯ</span><strong>SF / 04</strong></div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <span>SABERFORGE INDUSTRIES <i>©</i> 2026</span>
+      <span class="footer-tip"><kbd>←</kbd><kbd>→</kbd> вращение <b>·</b> <kbd>SPACE</kbd> включить / выключить</span>
+      <span class="footer-signature">ПУСТЬ СИЛА БУДЕТ С ТОБОЙ <span>✦</span></span>
+    </footer>
+  </div>
+
+  <dialog class="modal collection-modal" id="collectionDialog">
+    <div class="modal-header">
+      <div><span class="eyebrow">ЛИЧНЫЙ АРХИВ</span><h2>Моя коллекция</h2><p>Сохранённые мечи живут в этом браузере.</p></div>
+      <button class="icon-button modal-close" data-close="collectionDialog" aria-label="Закрыть коллекцию"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="collection-grid" id="collectionGrid"></div>
+  </dialog>
+
+  <dialog class="modal help-modal" id="helpDialog">
+    <div class="modal-header">
+      <div><span class="eyebrow">КРАТКИЙ ИНСТРУКТАЖ</span><h2>Управление мечом</h2><p>Всё необходимое для работы в мастерской.</p></div>
+      <button class="icon-button modal-close" data-close="helpDialog" aria-label="Закрыть справку"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="help-list">
+      <div><span class="help-number">01</span><div><strong>Вращение</strong><p>Захвати меч мышью или пальцем и двигай влево и вправо. Стрелки на клавиатуре поворачивают на 5°.</p></div><kbd>← →</kbd></div>
+      <div><span class="help-number">02</span><div><strong>Масштаб</strong><p>Используй колесо мыши над голограммой, кнопки под ней или клавиши «+» и «−».</p></div><kbd>+ −</kbd></div>
+      <div><span class="help-number">03</span><div><strong>Своя конфигурация</strong><p>Выбери путь, модель рукояти и готовый кристалл — или задай любой HEX-цвет вручную.</p></div><span class="help-gem">◆</span></div>
+      <div><span class="help-number">04</span><div><strong>Сохранение</strong><p>«Сохранить PNG» создаёт изображение голограммы. Кнопка «В коллекцию» сохраняет настройки локально.</p></div><kbd>⌘ S</kbd></div>
+      <div><span class="help-number">05</span><div><strong>Наложение на фото</strong><p>Режим «Наложение»: загрузи снимок, тащи меч мышью, крути за кружок на клинке, тяни за нижний кружок или колесо мыши для размера. Shift при повороте — шаг 15°. Затем «Сохранить фото».</p></div><kbd>⇧</kbd></div>
+    </div>
+    <button class="button button-primary help-ready" data-close="helpDialog">Понятно, к сборке</button>
+  </dialog>
+
+  <input type="file" id="photoInput" accept="image/*" hidden>
+  <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-icon">✓</span><span id="toastMessage">Готово</span></div>
+  <script src="assets/demo-photo.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
